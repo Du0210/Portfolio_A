@@ -1,0 +1,16 @@
+{
+    "name": "Utills",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a69cf020f44ed4a4da326214c5d8289a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
