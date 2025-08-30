@@ -1,24 +1,24 @@
-using HDU.Managers;
+using HDU.Interface;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements.InputSystem;
 
-public abstract class BaseScene : MonoBehaviour
+namespace HDU.Managers
 {
-    public HDU.Define.CoreDefine.ESceneType SceneType { get; protected set; } = HDU.Define.CoreDefine.ESceneType.None;
-
-    public virtual void Init()
+    public abstract class BaseScene : MonoBehaviour, IScene
     {
-        if (EventSystem.current == null)
+        public HDU.Define.CoreDefine.ESceneType SceneType { get; protected set; } = HDU.Define.CoreDefine.ESceneType.None;
+
+        public virtual void Init()
         {
-            GameObject obj = new GameObject("#EventSystem");
-            obj.AddComponent<EventSystem>();
-            obj.AddComponent<StandaloneInputModule>();
+            if (EventSystem.current == null)
+            {
+                GameObject obj = new GameObject("#EventSystem");
+                obj.AddComponent<EventSystem>();
+                obj.AddComponent<StandaloneInputModule>();
 
+            }
         }
+
+        public abstract void Clear();
     }
-
-    
-
-    public abstract void Clear();
 }

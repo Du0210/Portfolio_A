@@ -1,5 +1,6 @@
 namespace HDU.Utils
 {
+    using HDU.Interface;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
@@ -32,21 +33,47 @@ namespace HDU.Utils
             return closest;
         }
 
-        public static Transform FindClosestUnit<T>(List<T> toList, Transform from) where T : Component
+        //public static T FindClosestUnit<T>(List<T> toList, T from) where T : IUnit
+        //{
+        //    T closest = default(T);
+        //    float minDist = float.MaxValue;
+
+        //    foreach (var enemy in toList)
+        //    {
+        //        if (from.UnitType == enemy.UnitType)
+        //            continue;
+                
+        //        float dist = Vector3.Distance(from.Transform.position, enemy.Transform.position);
+        //        if (dist < minDist)
+        //        {
+        //            minDist = dist;
+        //            closest = enemy;
+        //        }
+        //    }
+        //    return closest;
+        //}
+        public static T FindClosestUnit<T>(List<T> toList, T from, float maxRange = float.MaxValue) where T : IUnit
         {
-            Transform closest = null;
+            T closest = default;
             float minDist = float.MaxValue;
 
             foreach (var enemy in toList)
             {
-                float dist = Vector3.Distance(from.position, enemy.transform.position);
+                if (ReferenceEquals(enemy, from)) continue;
+                if (from.UnitType == enemy.UnitType) continue;
+                if (!enemy.IsVaild || !enemy.GameObject.activeSelf) continue;
+
+                float dist = Vector3.Distance(from.Transform.position, enemy.Transform.position);
+                if (dist < 0.1f || dist > maxRange) continue;
+
                 if (dist < minDist)
                 {
                     minDist = dist;
-                    closest = enemy.transform;
+                    closest = enemy;
                 }
             }
-            return closest.transform;
+
+            return closest;
         }
 
         public static Vector3 GetApproachPosition(Transform to, Transform from, float attackRange)

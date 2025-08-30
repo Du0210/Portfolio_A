@@ -3,6 +3,7 @@ namespace HDU.Managers
     using UnityEngine;
     using UnityEngine.SceneManagement;
     using Cysharp.Threading.Tasks;
+    using HDU.Interface;
 
     public class SceneManagerEx : IManager
     {
@@ -51,7 +52,7 @@ namespace HDU.Managers
             _isLoading = false;
             CurrentSceneType = NextScene;
 
-            //CurrentScene = GameObject.FindAnyObjectByType<BaseScene>();
+            CurrentScene = GameObject.FindAnyObjectByType<BaseScene>();
 
             CurrentSceneInit().Forget();
 

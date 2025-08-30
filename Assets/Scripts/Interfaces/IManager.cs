@@ -1,4 +1,4 @@
-namespace HDU.Managers
+namespace HDU.Interface
 {
     public interface IManager
     {

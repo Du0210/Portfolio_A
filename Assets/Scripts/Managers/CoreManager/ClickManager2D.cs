@@ -2,6 +2,7 @@ namespace HDU.Managers
 {
     using UnityEngine;
     using UnityEngine.EventSystems;
+    using HDU.Interface;
 
     public class ClickManager2D : IManager
     {

@@ -1,13 +1,12 @@
 namespace HDU.Managers
 {
-    using UnityEngine;
     //using ES3Internal;
     using System.Collections.Generic;
-    using HDU.Define;
-    using ESaveType = HDU.Define.CoreDefine.ESaveType;
+    using HDU.SaveData;
+    using static HDU.Define.CoreDefine;
     //using CodeStage.AntiCheat.ObscuredTypes;
 
-    public class SaveManager : IManager
+    public class SaveManager : HDU.Interface.IManager
     {
         #region Key
         private readonly string KEY_PASS = "HONGDONGUK";

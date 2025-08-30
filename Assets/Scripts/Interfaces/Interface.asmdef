@@ -1,6 +1,6 @@
 {
     "name": "Interface",
-    "rootNamespace": "",
+    "rootNamespace": "HDU.Interface",
     "references": [
         "GUID:bccf82e40159a3d4f876399e2f0398a8"
     ],

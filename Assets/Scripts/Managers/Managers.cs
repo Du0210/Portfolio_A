@@ -26,6 +26,9 @@ namespace HDU.Managers
         public static SaveManager Save { get => Instance._save; }
         public static ClickManager2D Click { get => Instance._click; }
         public static SceneManagerEx Scene { get => Instance._scene; }
+        public static UnitManager Unit { get => Instance._unit; }
+        public static GridManager Grid { get => Instance._grid; }
+        public static AStarManager AStar { get => Instance._atar; }
 
         public static bool IsQuitApplication { get => _isQuitApplication; }
 
@@ -44,6 +47,10 @@ namespace HDU.Managers
         private ClickManager2D _click = new ClickManager2D();
         private SceneManagerEx _scene = new SceneManagerEx();
         #endregion
+
+        private UnitManager _unit = new UnitManager();
+        private GridManager _grid = new GridManager();
+        private AStarManager _atar = new AStarManager();
 
         public static void Init()
         {
@@ -75,6 +82,9 @@ namespace HDU.Managers
             _instance._save.Init();
             _instance._click.Init();
             _instance._scene.Init();
+            _instance._unit.Init();
+            _instance._grid.Init();
+            _instance._atar.Init();
 
             _isInit = true;
         }
@@ -91,6 +101,9 @@ namespace HDU.Managers
             _instance._save.Clear();
             _instance._click.Clear();
             _instance._scene.Clear();
+            _instance._unit.Clear();
+            _instance._grid.Clear();
+            _instance._atar.Clear();
 
             _isInit = false;
         }

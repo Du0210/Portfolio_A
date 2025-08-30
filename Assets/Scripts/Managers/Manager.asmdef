@@ -1,6 +1,6 @@
 {
     "name": "Manager",
-    "rootNamespace": "",
+    "rootNamespace": "HDU.Managers",
     "references": [
         "Interface",
         "Utills",

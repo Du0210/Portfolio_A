@@ -1,14 +1,15 @@
-using UnityEngine;
-
-[System.Serializable]
-public class UserData : ISaveData
+namespace HDU.SaveData
 {
-    public SettingData Setting;
-    public string Version;
-
-    public void Initialize()
+    [System.Serializable]
+    public class UserData : HDU.Interface.ISaveData
     {
-        Setting = new SettingData();
-        Version = "0.0.1";
+        public SettingData Setting;
+        public string Version;
+
+        public void Initialize()
+        {
+            Setting = new SettingData();
+            Version = "0.0.1";
+        }
     }
 }

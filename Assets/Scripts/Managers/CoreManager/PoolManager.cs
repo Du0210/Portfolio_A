@@ -3,7 +3,7 @@ namespace HDU.Managers
     using System.Collections.Generic;
     using UnityEngine;
 
-    public class PoolManager : IManager
+    public class PoolManager : HDU.Interface.IManager
     {
         Dictionary<string, ObjectPool> _pool = new Dictionary<string, ObjectPool>();
         Transform _root;

@@ -1,6 +1,6 @@
 {
     "name": "Test",
-    "rootNamespace": "",
+    "rootNamespace": "HDU.Test",
     "references": [
         "GUID:bccf82e40159a3d4f876399e2f0398a8",
         "GUID:f51ebe6a0ceec4240a699833d6309b23",

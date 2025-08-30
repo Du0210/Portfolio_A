@@ -3,7 +3,7 @@ namespace HDU.Managers
     using System.Diagnostics;
     using UnityEngine;
 
-    public class GameManager : IManager
+    public class GameManager : HDU.Interface.IManager
     {
         bool _isInit = false;
 

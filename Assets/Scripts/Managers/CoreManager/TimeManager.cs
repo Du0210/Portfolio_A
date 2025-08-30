@@ -5,7 +5,7 @@ namespace HDU.Managers
     using UnityEngine;
     using static HDU.Define.CoreDefine;
 
-    public class TimeManager : IManager
+    public class TimeManager : HDU.Interface.IManager
     {
         #region Fields
         // 업데이트 가능 여부

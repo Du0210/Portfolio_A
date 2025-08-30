@@ -62,35 +62,15 @@ namespace HDU.Define
             OnSynchronizeTime,
 
             // UI
-            /// <summary> ELobbySceneType </summary>
-            OnOpenLobbyType,
 
             // Stage
-            /// <summary> EStageType, int </summary>
-            OnClickStageTile,
 
             // Unit
-            OnSelectUnit,
 
             // Battle
-            OnChangedBattleLoop,
-            OnChangedBattleState,
-            OnOpenFirstCard,
-            OnOpenCard,
-            OnSetFirstUnitSetting,
-            OnSelectCard,
-            OnDrawBattleTimer,
-            OnDrawCost, 
-            OnDrawWave,
-            OnHideCard,
-            OnMoveSpawnerNext,
-            OnFollowCamUpdate,
-            OnKillEnemy,
-            OnKillPlayer,
-            OnSpawnEnemy,
+
             /// <summary> bool </summary>
-            OnOpenResultPanel,
-            OnOpenBattleMenuPanel,
+
         }
         public enum EBattleLoop
         {
@@ -115,9 +95,6 @@ namespace HDU.Define
         public enum ESaveType
         {
             SettingData, //현재하나밖에없음
-            StageData,
-            UnitData,
-            GoodsData,
             MaxCount,
         }
         public enum ECardType
@@ -149,38 +126,6 @@ namespace HDU.Define
             Battle,
         }
 
-        public enum EUnitType
-        {
-            Player,
-            Enemy,
-        }
-
-        public enum EPlayerUnitType
-        {
-            Nurse,
-            Knight,
-            Panda,
-            Elf,
-            Student,
-            Goth,
-            Witch,
-            Pirate,
-            MaxCount,
-        }
-
-        public enum EProjectileType
-        {
-            None,
-            Bullet_0,
-        }
-
-        public enum EEnemyUnitType
-        {
-            Mon_0, Mon_1, Mon_2, Mon_3, Mon_4,
-            Mon_5,
-            MaxCount,
-        }
-
         public enum EUnitAttackType
         {
             None,
@@ -188,73 +133,48 @@ namespace HDU.Define
             Ranged,
             MaxCount,
         }
-        public enum EBaseFSM
-        {
-            StateStart,
-            StateUpdate,
-            StateEnd,
-        }
+        //public enum EBaseFSM
+        //{
+        //    StateStart,
+        //    StateUpdate,
+        //    StateEnd,
+        //}
         public enum EUnitState
         {
+            None,
             Idle,
             Move,
             Attack,
-            Skill,
             Dead,
             MaxCount,
         }
-
-        public enum EUnitPosition
+        public enum EUnitType
         {
-            Front,
-            Middle,
-            Back,
-            MaxCount,
+            None,
+            Slime,
+            Spike,
         }
 
         public enum ESpawnType
         {
-            Player,
-            Enemy,
-            UI,
+            None,
+            Slime_R,
+            Slime_S,
         }
 
-        public enum ESpineSkinType
+        // 임시 통합 애니메이션 키값
+        public enum EAnimationKey
         {
-            Knight,
-            Pirate,
-            Witch,
-            Nerse,
-            Regent,
-            Panda,
-            Goth,
-            Elf,
+            IdleBlend,
+            AttackBlend,
+            Die,
+            Hit,
+            Move,
         }
-
-        public enum ESpineWpSlotType
+        public enum ELayerMask
         {
-            E_Staff_09, // 칼
-            E_Staff_18, // 후크
-            E_Staff_19, // 별 지팡이
-            E_Staff_07, // 주사기
-            E_Staff_20, // 총
-            E_Staff_03, // 메로나
-            E_Staff_08, // 냥냥펀치
-            E_Staff_04, // 전기톱
-        }
-
-        public enum EPlayerSpineAnimKey
-        {
-            /// <summary> 기본 </summary>
-            IDLE,
-            /// <summary> 근접 </summary>
-            ATTACK6,
-            /// <summary> 원거리 </summary>
-            ATTACK2,
-            /// <summary> 이동 </summary>
-            FLY,
-            /// <summary> 사망 </summary>
-            DIE,
+            Default,
+            Obstacle,
         }
         #endregion
     }

@@ -1,6 +1,7 @@
-using UnityEngine;
-
-public interface IClickable
+namespace HDU.Interface
 {
-    public void OnClick2D();
+    public interface IClickable
+    {
+        public void OnClick2D();
+    }
 }

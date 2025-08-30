@@ -1,7 +1,8 @@
-using UnityEngine;
-
-public interface IScene
+namespace HDU.Interface
 {
-    public void Init();
-    public void Clear();
+    public interface IScene
+    {
+        public void Init();
+        public void Clear();
+    }
 }

@@ -1,6 +1,6 @@
 {
     "name": "UI",
-    "rootNamespace": "",
+    "rootNamespace": "HDU.UI",
     "references": [
         "GUID:bccf82e40159a3d4f876399e2f0398a8",
         "GUID:5810ae566634a3a489750a7fdee59e15",

@@ -2,7 +2,7 @@ namespace HDU.Managers
 {
     using UnityEngine;
 
-    public class ResourceManager : IManager
+    public class ResourceManager : HDU.Interface.IManager
     {
         public void Clear()
         {

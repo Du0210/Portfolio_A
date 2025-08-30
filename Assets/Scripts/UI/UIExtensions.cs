@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public static class UIExtensions
+namespace HDU.UI
 {
-    public static void AddUIEvent(this GameObject go, UnityAction<PointerEventData> action, CoreDefine.EUIEventType type = CoreDefine.EUIEventType.LClick)
+    public static class UIExtensions
     {
-        UI_Base.AddUIEvent(go, action, type);
-    }
-    public static void RemoveUIEvent(this GameObject go, UnityAction<PointerEventData> action, CoreDefine.EUIEventType type = CoreDefine.EUIEventType.LClick)
-    {
-        UI_Base.RemoveUIEvent(go, action, type);
+        public static void AddUIEvent(this GameObject go, UnityAction<PointerEventData> action, CoreDefine.EUIEventType type = CoreDefine.EUIEventType.LClick)
+        {
+            UI_Base.AddUIEvent(go, action, type);
+        }
+        public static void RemoveUIEvent(this GameObject go, UnityAction<PointerEventData> action, CoreDefine.EUIEventType type = CoreDefine.EUIEventType.LClick)
+        {
+            UI_Base.RemoveUIEvent(go, action, type);
+        }
     }
 }

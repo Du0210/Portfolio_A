@@ -1,6 +1,7 @@
-using UnityEngine;
-
-public interface ISaveData
+namespace HDU.Interface
 {
-    public void Initialize();
+    public interface ISaveData
+    {
+        public void Initialize();
+    }
 }

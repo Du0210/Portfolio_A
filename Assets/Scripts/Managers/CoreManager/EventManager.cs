@@ -4,7 +4,7 @@ namespace HDU.Managers
     using UnityEngine;
     using System;
 
-    public class EventManager : IManager
+    public class EventManager : HDU.Interface.IManager
     {
         private Dictionary<Define.CoreDefine.EEventType, Delegate> _dictEvents;
 

@@ -3,12 +3,13 @@ namespace HDU.Managers
     using System.Collections.Generic;
     using System;
     using UnityEngine;
+    using HDU.Interface;
 
     public class UIManager : IManager
     {
         public void Init()
         {
-            SetUIRoot();
+            //SetUIRoot();
         }
 
         public void Clear()

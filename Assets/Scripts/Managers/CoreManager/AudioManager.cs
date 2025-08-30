@@ -5,7 +5,7 @@ namespace HDU.Managers
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
-    public class AudioManager : IManager
+    public class AudioManager : HDU.Interface.IManager
     {
         private AudioSource _bgmAudioSource = new AudioSource();
         private AudioSource[] _efAudioSources = new AudioSource[EFAUDIONMAXCOUNT];

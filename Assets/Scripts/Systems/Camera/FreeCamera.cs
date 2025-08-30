@@ -1,26 +1,38 @@
-using UnityEngine;
-
-public class FreeCamera : MonoBehaviour
+namespace HDU.GameSystem
 {
-    public float moveSpeed = 10f;
-    public float lookSpeed = 3f;
+    using UnityEngine;
 
-    private float yaw, pitch;
-
-    void Update()
+    public class FreeCamera : MonoBehaviour
     {
-        // 마우스 회전
-        yaw += lookSpeed * Input.GetAxis("Mouse X");
-        pitch -= lookSpeed * Input.GetAxis("Mouse Y");
-        pitch = Mathf.Clamp(pitch, -80, 80);
-        transform.eulerAngles = new Vector3(pitch, yaw, 0);
+        public float moveSpeed = 10f;
+        public float lookSpeed = 3f;
+        public CameraConfiner confiner;   // 아래 스크립트 참조
 
-        // 키보드 이동
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        transform.Translate(move * moveSpeed * Time.deltaTime, Space.Self);
+        private float yaw, pitch;
 
-        // 위/아래 이동 (Q/E)
-        if (Input.GetKey(KeyCode.E)) transform.Translate(Vector3.up * moveSpeed * Time.deltaTime);
-        if (Input.GetKey(KeyCode.Q)) transform.Translate(Vector3.down * moveSpeed * Time.deltaTime);
+        void Update()
+        {
+            // 회전
+            yaw += lookSpeed * Input.GetAxis("Mouse X");
+            pitch -= lookSpeed * Input.GetAxis("Mouse Y");
+            pitch = Mathf.Clamp(pitch, -80, 80);
+            transform.rotation = Quaternion.Euler(pitch, yaw, 0);
+
+            // 입력으로 목표 위치 계산
+            Vector3 move =
+                transform.right * Input.GetAxis("Horizontal") +
+                transform.forward * Input.GetAxis("Vertical");
+
+            if (Input.GetKey(KeyCode.E)) move += Vector3.up;
+            if (Input.GetKey(KeyCode.Q)) move += Vector3.down;
+
+            Vector3 targetPos = transform.position + move * moveSpeed * Time.deltaTime;
+
+            // ★ 허용 구역으로 위치 보정
+            if (confiner)
+                targetPos = confiner.ClampInside(targetPos);
+
+            transform.position = targetPos;
+        }
     }
 }
