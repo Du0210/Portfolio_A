@@ -9,6 +9,7 @@ namespace HDU.GameSystem
     using System.Threading;
     using UnityEngine;
     using static HDU.Define.CoreDefine;
+    using static UnityEngine.GraphicsBuffer;
 
     public class CommonIdleState : IState
     {
@@ -25,19 +26,26 @@ namespace HDU.GameSystem
         public void OnUpdate(IUnit unit, float deltaTime)
         {
             // 대기 관련 로직
-            IUnit target = Managers.Unit.FindNearstTargetOrNull(unit);
+            if(!Managers.IsUseJob)
+            {
+                IUnit target = Managers.Unit.FindNearstTargetOrNull(unit);
 
-            if (target == null)
-                return;
+                if (target == null)
+                    return;
 
-            var targetNode = Managers.Grid.GetNodeFromWorldPos(target.Transform.position, Managers.Grid.GridSize, Managers.Grid.CellSize);
-            if (targetNode == null || !targetNode.IsWalkable)
-                return;
+                var targetNode = Managers.Grid.GetNodeFromWorldPos(target.Transform.position, Managers.Grid.GridSize, Managers.Grid.CellSize);
+                if (targetNode == null || !targetNode.IsWalkable)
+                    return;
 
-            // 타겟이 존재하면 이동 상태로 전환
-            unit.Target = target;
-
-            ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Move);
+                // 타겟이 존재하면 이동 상태로 전환
+                unit.Target = target;
+                ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Move);
+            }
+            else
+            {
+                if (unit.Target != null)
+                    ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Move);
+            }
         }
 
         public void OnExit(IUnit unit)
@@ -56,6 +64,7 @@ namespace HDU.GameSystem
         private float _refindTargetTimer = 0f;
         private float _refindTargetInterval = 1f;
         private Vector3 _targetLastPos = Vector3.zero;
+        private IUnit _target = null;
         public Action<CoreDefine.EUnitState> ChangeStateCallback { get; set; }
         List<Node> _path = null;
 
@@ -68,10 +77,14 @@ namespace HDU.GameSystem
             unit.PlayAnimation(nameof(EAnimationKey.Move));
             // 목적지 세팅
             _targetLastPos = unit.Target.Transform.position;
+            _target = unit.Target;
 
             try
             {
-                await MovePath(unit);
+                if (!Managers.IsUseJob)
+                    await MovePath(unit);
+                else
+                    await MovePathJob(unit);
             }
             catch (OperationCanceledException)
             {
@@ -86,6 +99,7 @@ namespace HDU.GameSystem
 
             if (!unit.Target.IsVaild)
             {
+                _moveCts?.Cancel();
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
                 return;
             }
@@ -93,25 +107,52 @@ namespace HDU.GameSystem
             if (_refindTargetTimer >= _refindTargetInterval)
             {
                 _refindTargetTimer = 0;
-                IUnit target = Managers.Unit.FindNearstTargetOrNull(unit);
-                if(unit.Target != target)
+
+                if(!Managers.IsUseJob)
                 {
-                    unit.Target = target;
-                    _targetLastPos = unit.Target.Transform.position;
-                    _moveCts?.Cancel();
-                    try
+                    IUnit target = Managers.Unit.FindNearstTargetOrNull(unit);
+                    if (unit.Target != target)
                     {
-                        await MovePath(unit);
+                        unit.Target = target;
+                        _target = target;
+                        _targetLastPos = unit.Target.Transform.position;
+                        _moveCts?.Cancel();
+                        try
+                        {
+                            if (!Managers.IsUseJob)
+                                await MovePath(unit);
+                            else
+                                await MovePathJob(unit);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                        return;
                     }
-                    catch (Exception)
+                }
+                else
+                {
+                    if(_target != unit.Target)
                     {
+                        _target = unit.Target;
+                        _targetLastPos = _target.Transform.position;
+                        _moveCts?.Cancel();
+                        try
+                        {
+                            if (!Managers.IsUseJob)
+                                await MovePath(unit);
+                            else
+                                await MovePathJob(unit);
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
-                    return;
                 }
             }
 
             // 사거리 체크
-            float distanceToTarget = Vector3.Distance(unit.Transform.position, unit.Target.Transform.position);
+            float distanceToTarget = Vector3.Distance(unit.Transform.position, _target.Transform.position);
             if(distanceToTarget < unit.AttackRange)
             {
                 _moveCts?.Cancel();
@@ -119,17 +160,20 @@ namespace HDU.GameSystem
                 return;
             }
 
-            if(_targetLastPos != unit.Target.Transform.position)
+            if(_targetLastPos != _target.Transform.position)
             {
                 if (_repathTimer >= _repathInterval)
                 {
                     _repathTimer = 0f;
 
-                    _targetLastPos = unit.Target.Transform.position;
+                    _targetLastPos = _target.Transform.position;
                     _moveCts?.Cancel();
                     try
                     {
-                        await MovePath(unit);
+                        if (!Managers.IsUseJob)
+                            await MovePath(unit);
+                        else
+                            await MovePathJob(unit);
                     }
                     catch (OperationCanceledException)
                     {
@@ -142,7 +186,8 @@ namespace HDU.GameSystem
         {
             _moveCts = new CancellationTokenSource();
 
-             var path = Managers.AStar.FindPath(unit.Transform.position, unit.Target.Transform.position, unit.GetRadius());
+            var token = unit.GameObject.GetCancellationTokenOnDestroy();
+            var path = Managers.AStar.FindPath(unit.Transform.position, _target.Transform.position, unit.GetRadius());
 
             if (path == null || path.Count == 0)
             {
@@ -181,8 +226,6 @@ namespace HDU.GameSystem
                         return;
                     }
 
-                    _moveCts.Token.ThrowIfCancellationRequested();
-
                     if(dir != Vector3.zero)
                     {
                         Quaternion targetRot = Quaternion.LookRotation(dir);
@@ -193,6 +236,54 @@ namespace HDU.GameSystem
                     unit.Transform.position = nextPos;
 
                     await UniTask.WaitForFixedUpdate(); // 프레임마다 대기
+                    //_moveCts?.Token.ThrowIfCancellationRequested();
+                    token.ThrowIfCancellationRequested();
+                }
+            }
+        }
+
+        private async UniTask MovePathJob(IUnit unit)
+        {
+            _moveCts = new CancellationTokenSource();
+            var token = unit.GameObject.GetCancellationTokenOnDestroy();
+
+            var path = await Managers.AStar.FindPathAsync(unit.Transform.position, _target.Transform.position, unit.GetRadius());
+            if(path == null || path.Count == 0)
+            {
+                ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
+                return;
+            }
+
+            foreach (var targetPos in path)
+            {
+                // 방향 회전
+                Vector3 dir = (targetPos - unit.Transform.position).normalized;
+                if (dir != Vector3.zero)
+                {
+                    Quaternion targetRot = Quaternion.LookRotation(dir);
+                    unit.Transform.rotation = Quaternion.RotateTowards(unit.Transform.rotation, targetRot, 720 * Time.fixedDeltaTime); // 초당 720도 회전
+                }
+
+                // 목적지에 도달할 때까지 이동
+                while ((unit.Transform.position - targetPos).sqrMagnitude > 0.01f)
+                {
+                    if (!unit.Target.IsVaild)
+                    {
+                        ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
+                        return;
+                    }
+                    if (dir != Vector3.zero)
+                    {
+                        Quaternion targetRot = Quaternion.LookRotation(dir);
+                        unit.Transform.rotation = Quaternion.RotateTowards(unit.Transform.rotation, targetRot, 720 * Time.fixedDeltaTime); // 초당 720도 회전
+                    }
+
+                    Vector3 nextPos = Vector3.MoveTowards(unit.Transform.position, targetPos, unit.MoveSpeed * Time.fixedDeltaTime);
+                    unit.Transform.position = nextPos;
+                    
+                    await UniTask.WaitForFixedUpdate(); // 프레임마다 대기
+                    token.ThrowIfCancellationRequested();
+                    _moveCts?.Token.ThrowIfCancellationRequested();
                 }
             }
         }
@@ -213,11 +304,12 @@ namespace HDU.GameSystem
         }
     }
 
-    public class CommonAttackState : IState
+    public class CommonAttackState : IState, IDisposable
     {
         public float _elapsedTime { get; set; } = 0f;
         public Action<CoreDefine.EUnitState> ChangeStateCallback { get; set; }
         private bool _isAttacking = false;
+        private CancellationTokenSource _atkCts;
 
         public void OnEnter(IUnit unit)
         {
@@ -234,6 +326,7 @@ namespace HDU.GameSystem
 
             if (!unit.Target.IsVaild)
             {
+                _atkCts?.Cancel();
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
                 return;
             }
@@ -247,6 +340,7 @@ namespace HDU.GameSystem
                     _isAttacking = true;
                     try
                     {
+                        _atkCts?.Cancel();
                         await StartAttackAnim(0.5f, 1f, unit);
                     }
                     catch (OperationCanceledException)
@@ -257,12 +351,14 @@ namespace HDU.GameSystem
             }
             else
             {
+                _atkCts?.Cancel();
                 ChangeStateCallback?.Invoke(EUnitState.Idle);
             }
         }
 
         public async UniTask StartAttackAnim(float wait, float duration, IUnit unit)
         {
+            _atkCts = new CancellationTokenSource();
             if (!unit.Target.IsVaild)
             {
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
@@ -270,10 +366,12 @@ namespace HDU.GameSystem
             }
 
             var token = unit.GameObject.GetCancellationTokenOnDestroy();
+            _atkCts.Token.ThrowIfCancellationRequested();
 
             unit.PlayAnimation(nameof(EAnimationKey.AttackBlend));
             await UniTask.Delay(TimeSpan.FromSeconds(wait), cancellationToken: token);
 
+            _atkCts.Token.ThrowIfCancellationRequested();
             if (!unit.Target.IsVaild)
             {
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
@@ -283,13 +381,20 @@ namespace HDU.GameSystem
             unit.Target.Target = unit; // 맞은 대상이 때린 대상을 타겟으로 설정
             unit.Target.TakeDamage(unit.AttackPower);
             await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: token);
-
+            _atkCts.Token.ThrowIfCancellationRequested();
         }
 
         public void OnExit(IUnit unit)
         {
         }
         public void RegistChangeStateCallback(Action<CoreDefine.EUnitState> callback) => ChangeStateCallback = callback;
+
+        public void Dispose()
+        {
+            _atkCts?.Cancel();
+            _atkCts?.Dispose();
+            _atkCts = null;
+        }
     }
 
     public class CommonDieState : IState

@@ -1,5 +1,9 @@
+using Cysharp.Threading.Tasks;
 using HDU.Interface;
+using HDU.Jobs;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
 namespace HDU.Managers
@@ -18,6 +22,47 @@ namespace HDU.Managers
         {
             
         }
+
+        #region Job
+        public async UniTask<List<Vector3>> FindPathAsync(Vector3 startWorldPos, Vector3 endWorldPos, float unitRadius)
+        {
+            var grid = Managers.Grid;
+            int nodeCount = grid.GridSize.x * grid.GridSize.y;
+
+            var nodeRecords = new NativeArray<NodeRecord>(nodeCount, Allocator.TempJob);
+            Managers.Grid.InitNodeRecords(nodeRecords, nodeCount);
+            var resultPath = new NativeList<Unity.Mathematics.int2>(Allocator.TempJob);
+
+            var job = new FindPathJob
+            {
+                Grid = grid.NativeGrid,
+                Records = nodeRecords,
+                ResultPath = resultPath,
+                StartWorldPos = startWorldPos,
+                TargetWorldPos = endWorldPos,
+                GridSize = new Unity.Mathematics.int2(grid.GridSize.x, grid.GridSize.y),
+                CellSize = grid.CellSize,
+                GridOrigin = grid.GridPoint.position
+            };
+
+            job.Run();
+            //var handle = job.Schedule();
+            //await UniTask.WaitUntil(() => handle.IsCompleted);
+            //handle.Complete();
+
+            List<Vector3> path = new List<Vector3>(resultPath.Length);
+            for(int i = 0; i < resultPath.Length; i++)
+            {
+                Vector3 pos = grid.GetWorldPosFromGrid(resultPath[i]);
+                path.Add(pos);
+            }
+
+            nodeRecords.Dispose();
+            resultPath.Dispose();
+
+            return path;
+        }
+        #endregion
 
         public List<Node> FindPath(Vector3 startWorldPos, Vector3 targetWorldPos, float unitRadius)
         {

@@ -13,7 +13,7 @@ namespace HDU.GameSystem
         [SerializeField] private float radius = 10f;
         [SerializeField] private Color _gizmoColor = Color.yellow;
 
-        private readonly int MAXUNITCOUNT = 5;
+        private readonly int MAXUNITCOUNT = 1;
 
         private async void Start()
         {

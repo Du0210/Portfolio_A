@@ -31,9 +31,11 @@ namespace HDU.Managers
         public static AStarManager AStar { get => Instance._atar; }
 
         public static bool IsQuitApplication { get => _isQuitApplication; }
+        public static bool IsUseJob { get => _isUseJob; set => _isUseJob = value; }
 
         private static bool _isInit = false;
         private static bool _isQuitApplication = false;
+        private static bool _isUseJob = true;
 
         #region Core Manager
         private GameManager _game = new GameManager();
@@ -112,6 +114,7 @@ namespace HDU.Managers
         {
             _time.Update();
             _click.Update();
+            _unit.Update();
         }
 
         private void OnApplicationPause(bool pause)

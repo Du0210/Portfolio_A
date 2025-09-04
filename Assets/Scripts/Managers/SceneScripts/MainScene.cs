@@ -14,6 +14,7 @@ namespace HDU.Managers
         {
             Managers.Click.SetCamera(Camera.main);
             Managers.Grid.InitGrid(_gridPoint);
+            Managers.Grid.InitGridJobCompatible(_gridPoint);
         }
 
         public override void Clear()

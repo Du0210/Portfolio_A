@@ -1,6 +1,9 @@
 ﻿using HDU.Interface;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Mathematics;
+using Unity.Collections;
+using HDU.Jobs;
 
 namespace HDU.Managers
 {
@@ -39,11 +42,13 @@ namespace HDU.Managers
     public class GridManager : IManager
     {
         // 가로 세로 셀 개수
+        public Transform GridPoint { get => _gridPoint; }
         public Vector2Int GridSize { get; private set; } = new Vector2Int(8, 24);
         public float CellSize { get; private set; } = 0.5f;
-
         private Node[,] _grid;
         public Node[,] Grid => _grid;
+
+        public NativeArray<HDU.Jobs.NodeData> NativeGrid;
 
         private Transform _gridPoint;
 
@@ -53,8 +58,54 @@ namespace HDU.Managers
         }
         public void Clear()
         {
-
+            if (NativeGrid.IsCreated)
+                NativeGrid.Dispose();
         }
+
+        #region Job
+        public void InitGridJobCompatible(Transform gridPointOrigin)
+        {
+            _gridPoint = gridPointOrigin;
+
+            int totalSize = GridSize.x * GridSize.y;
+            NativeGrid = new NativeArray<NodeData>(totalSize, Allocator.Persistent);
+            int2 gridSize = new int2(GridSize.x, GridSize.y);
+            LayerMask obstacleLayer = LayerMask.GetMask("Obstacle");
+
+            for (int x = 0; x < GridSize.x; x++)
+            {
+                for (int y = 0; y < GridSize.y; y++)
+                {
+                    int index = JobUtils.Get1DIndex(x, y, gridSize);
+
+                    Vector3 worldPos = _gridPoint.position + new Vector3(x * CellSize, 0f, y * CellSize);
+                    bool walkable = !Physics.CheckBox(worldPos, Vector3.one * (CellSize * 0.4f), Quaternion.identity, obstacleLayer);
+
+                    NativeGrid[index] = new NodeData
+                    {
+                        GridPos = new int2(x, y),
+                        WorldPos = worldPos,
+                        IsWalkable = walkable
+                    };
+                }
+            }
+        }
+
+        public void InitNodeRecords(NativeArray<NodeRecord> records, int totalNodeCount, Allocator allocator = Allocator.TempJob)
+        {
+            for (int i = 0; i < totalNodeCount; i++)
+            {
+                records[i] = new NodeRecord
+                {
+                    GCost = 9999999,
+                    HCost = 0,
+                    ParentIndex = -1,
+                    Flags = 0
+                };
+            }
+        }
+        #endregion
+
         public void InitGrid(Transform gridPoint)
         {
             _grid = new Node[GridSize.x, GridSize.y];
@@ -171,6 +222,12 @@ namespace HDU.Managers
             }
 
             return neighbors;
+        }
+
+        // 그리드 좌표(int2) -> 월드 좌표 볁환
+        public Vector3 GetWorldPosFromGrid(int2 gridPos)
+        {
+            return new Vector3(_gridPoint.position.x + (gridPos.x + 0.5f) * CellSize, 0f, _gridPoint.position.z + (gridPos.y + 0.5f) * CellSize);
         }
 
         public void DrawGizmos()
