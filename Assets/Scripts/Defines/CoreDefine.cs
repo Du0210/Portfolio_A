@@ -89,8 +89,7 @@ namespace HDU.Define
         {
             None,
             DevScene,
-            LobbyScene,
-            BattleScene,
+            MainScene,
         }
         public enum ESaveType
         {

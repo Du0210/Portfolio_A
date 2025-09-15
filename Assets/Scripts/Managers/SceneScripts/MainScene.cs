@@ -13,8 +13,9 @@ namespace HDU.Managers
         private void Awake()
         {
             Managers.Click.SetCamera(Camera.main);
-            Managers.Grid.InitGrid(_gridPoint);
+            // 전환을 위해 각각의 그리드 생성
             Managers.Grid.InitGridJobCompatible(_gridPoint);
+            Managers.Grid.InitGrid(_gridPoint);
         }
 
         public override void Clear()

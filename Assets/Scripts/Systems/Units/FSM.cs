@@ -31,7 +31,7 @@ namespace HDU.GameSystem
 
         public void ChangeState(EUnitState newState)
         {
-            if (_currentStateType == newState)
+            if (_currentStateType == newState || !_stateDict.ContainsKey(newState))
                 return;
 
             _currentState?.OnExit(_unit);

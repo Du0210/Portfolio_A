@@ -2,6 +2,7 @@ namespace HDU.Managers
 {
     using System;
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     public class Managers : MonoBehaviour
     {
@@ -132,6 +133,11 @@ namespace HDU.Managers
         {
             if (_instance != null)
                 _isQuitApplication = true;
+        }
+
+        public static void SwitchUseJob()
+        {
+            _isUseJob = !_isUseJob;
         }
     }
 }

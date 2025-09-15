@@ -14,8 +14,8 @@ namespace HDU.Jobs
     {
         public int GCost;
         public int HCost;
-        public int ParentIndex;     // 부모 노드의 1D 인덱스
-        public byte Flags;          // OpenSet / CosedSet 정보를 1바이트로 압축
+        public int ParentIndex;
+        public byte Flags; // Bitmask: 1=open, 2=closed
 
         public int FCost => GCost + HCost;
 
@@ -23,6 +23,10 @@ namespace HDU.Jobs
         public bool IsInClosedSet => (Flags & 2) != 0;
 
         public void MarkOpen() => Flags |= 1;
-        public void MarkClosed() => Flags |= 2;
+        public void MarkClosed()
+        {
+            Flags &= unchecked((byte)~1); // remove Open
+            Flags |= 2;                   // add Closed
+        }
     }
 }

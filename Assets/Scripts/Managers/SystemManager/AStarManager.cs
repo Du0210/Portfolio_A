@@ -29,9 +29,9 @@ namespace HDU.Managers
             var grid = Managers.Grid;
             int nodeCount = grid.GridSize.x * grid.GridSize.y;
 
-            var nodeRecords = new NativeArray<NodeRecord>(nodeCount, Allocator.TempJob);
+            var nodeRecords = new NativeArray<NodeRecord>(nodeCount, Allocator.Persistent);
             Managers.Grid.InitNodeRecords(nodeRecords, nodeCount);
-            var resultPath = new NativeList<Unity.Mathematics.int2>(Allocator.TempJob);
+            var resultPath = new NativeList<Unity.Mathematics.int2>(Allocator.Persistent);
 
             var job = new FindPathJob
             {
@@ -45,15 +45,16 @@ namespace HDU.Managers
                 GridOrigin = grid.GridPoint.position
             };
 
-            job.Run();
-            //var handle = job.Schedule();
-            //await UniTask.WaitUntil(() => handle.IsCompleted);
-            //handle.Complete();
+            //job.Run();
+            var handle = job.Schedule();
+            await UniTask.WaitUntil(() => handle.IsCompleted);
+            handle.Complete();
 
             List<Vector3> path = new List<Vector3>(resultPath.Length);
             for(int i = 0; i < resultPath.Length; i++)
             {
                 Vector3 pos = grid.GetWorldPosFromGrid(resultPath[i]);
+                pos.y = startWorldPos.y;
                 path.Add(pos);
             }
 

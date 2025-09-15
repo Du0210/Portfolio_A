@@ -232,19 +232,48 @@ namespace HDU.Managers
 
         public void DrawGizmos()
         {
-            if (_grid == null) return;
-
-            for (int x = 0; x < GridSize.x; x++)
+            if (!Managers.IsUseJob)
             {
-                for (int y = 0; y < GridSize.y; y++)
+                if (_grid == null) return;
+            }
+            else
+            {
+                if (NativeGrid == null) return;
+            }
+
+            if (!Managers.IsUseJob)
+            {
+                for (int x = 0; x < GridSize.x; x++)
                 {
-                    Node node = _grid[x, y];
+                    for (int y = 0; y < GridSize.y; y++)
+                    {
+                        Node node = _grid[x, y];
 
-                    Gizmos.color = node.IsWalkable ? Color.green : Color.red;
+                        Gizmos.color = node.IsWalkable ? Color.green : Color.red;
 
-                    Gizmos.DrawWireCube(node.WorldPos + Vector3.up * 0.1f, Vector3.one * (CellSize * 0.9f));
+                        Gizmos.DrawWireCube(node.WorldPos + Vector3.up * 0.1f, Vector3.one * (CellSize * 0.9f));
+                    }
                 }
             }
+            else
+            {
+                int2 gridSize = new int2(GridSize.x, GridSize.y);
+
+                for (int x = 0; x < GridSize.x; x++)
+                {
+                    for (int y = 0; y < GridSize.y; y++)
+                    {
+
+                        int index = JobUtils.Get1DIndex(x, y, gridSize);
+                        NodeData node = NativeGrid[index];
+
+                        Gizmos.color = node.IsWalkable ? Color.green : Color.red;
+                        Vector3 pos = new Vector3(node.WorldPos.x, node.WorldPos.y, node.WorldPos.z);
+                        Gizmos.DrawWireCube(pos + Vector3.up * 0.1f, Vector3.one * (CellSize * 0.9f));
+                    }
+                }
+            }
+
         }
     }
 }

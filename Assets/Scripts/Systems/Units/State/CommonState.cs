@@ -366,12 +366,12 @@ namespace HDU.GameSystem
             }
 
             var token = unit.GameObject.GetCancellationTokenOnDestroy();
-            _atkCts.Token.ThrowIfCancellationRequested();
+            _atkCts?.Token.ThrowIfCancellationRequested();
 
             unit.PlayAnimation(nameof(EAnimationKey.AttackBlend));
             await UniTask.Delay(TimeSpan.FromSeconds(wait), cancellationToken: token);
 
-            _atkCts.Token.ThrowIfCancellationRequested();
+            _atkCts?.Token.ThrowIfCancellationRequested();
             if (!unit.Target.IsVaild)
             {
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
@@ -381,7 +381,7 @@ namespace HDU.GameSystem
             unit.Target.Target = unit; // 맞은 대상이 때린 대상을 타겟으로 설정
             unit.Target.TakeDamage(unit.AttackPower);
             await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: token);
-            _atkCts.Token.ThrowIfCancellationRequested();
+            _atkCts?.Token.ThrowIfCancellationRequested();
         }
 
         public void OnExit(IUnit unit)
