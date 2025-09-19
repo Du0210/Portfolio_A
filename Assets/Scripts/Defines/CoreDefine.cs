@@ -175,6 +175,13 @@ namespace HDU.Define
             Default,
             Obstacle,
         }
+
+        public enum EAddressableKey
+        {
+            Unit_Slime_S,
+            Unit_Slime_R,
+            MaxCount,
+        }
         #endregion
     }
 }

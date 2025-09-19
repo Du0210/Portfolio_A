@@ -1,7 +1,10 @@
 namespace HDU.Managers
 {
     using UnityEngine;
-
+    using UnityEngine.AddressableAssets;
+    using UnityEngine.ResourceManagement.AsyncOperations;
+    using Cysharp.Threading.Tasks;
+    
     public class ResourceManager : HDU.Interface.IManager
     {
         public void Clear()
@@ -14,11 +17,11 @@ namespace HDU.Managers
 
         }
 
-        public T Load<T>(string path) where T : Object
+        public async UniTask<T> LoadAsync<T>(string key) where T : Object
         {
-            if (typeof(T) == typeof(GameObject))
+            if(typeof(T) == typeof(GameObject))
             {
-                string name = path;
+                string name = key;
                 int index = name.LastIndexOf('/');
                 if (index >= 0)
                     name = name.Substring(index + 1);
@@ -28,21 +31,31 @@ namespace HDU.Managers
                     return go as T;
             }
 
-            return Resources.Load<T>(path);
+            AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(key);
+            await handle.ToUniTask();
+
+            if (handle.Status == AsyncOperationStatus.Succeeded)
+                return handle.Result;
+
+            Debug.LogError($"[ResourceManager] Failed to load asset : {key}");
+            return null;
         }
 
-        public GameObject Instantiate(string path = null, GameObject obj = null, Transform parent = null)
+        /// <summary>
+        /// 동기 방식 로드
+        /// </summary>
+        public T Load<T>(string key) where T : Object
         {
-            GameObject original = null;
+            return LoadAsync<T>(key).GetAwaiter().GetResult();
+        }
 
-            if (obj == null)
-                original = Load<GameObject>($"Prefabs/{path}");
-            else
-                original = obj;
+        public async UniTask<GameObject> InstantiateAsync(string key, Transform parent = null)
+        {
+            GameObject original = await LoadAsync<GameObject>(key);
 
             if (original == null)
             {
-                Debug.Log($"Failed to load prefab : {path}");
+                Debug.LogError($"[ResourceManager] Failed to load prefab : {key}");
                 return null;
             }
 
@@ -50,9 +63,44 @@ namespace HDU.Managers
                 return Managers.Pool.Pop(original, parent).gameObject;
 
             GameObject go = Object.Instantiate(original, parent);
-
             go.name = original.name;
+            return go;
+        }
 
+        /// <summary>
+        /// 동기 방식 인스턴스화
+        /// </summary>
+        public GameObject Instantiate(string key, Transform parent = null)
+        {
+            GameObject original = Load<GameObject>(key);
+
+            if(original == null)
+            {
+                Debug.LogError($"[ResourceManager] Prefab load failed : {key}");
+                return null;
+            }
+
+            if (original.TryGetComponent<Poolable>(out var poolable))
+                return Managers.Pool.Pop(original, parent).gameObject;
+
+            GameObject go = Object.Instantiate(original, parent);
+            go.name = original.name;
+            return go;
+        }
+
+        public GameObject Instantiate(GameObject obj, Transform parent = null)
+        {
+            if(obj == null)
+            {
+                Debug.LogError("[ResourceManager] Instantiate failed : obj is null");
+                return null;
+            }
+
+            if (obj.TryGetComponent<Poolable>(out var poolable))
+                return Managers.Pool.Pop(obj, parent).gameObject;
+
+            GameObject go =Object.Instantiate(obj, parent);
+            go.name= obj.name;
             return go;
         }
 

@@ -4,6 +4,7 @@ namespace HDU.Managers
     using System;
     using UnityEngine;
     using HDU.Interface;
+    using Cysharp.Threading.Tasks;
 
     public class UIManager : IManager
     {
@@ -70,11 +71,11 @@ namespace HDU.Managers
 
         #region ============================ Managed ============================
 
-        public T MakeSlot<T>(Transform parent = null, string name = null) where T : IUI
+        public async UniTask<T> MakeSlot<T>(Transform parent = null, string name = null) where T : IUI
         {
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
-            GameObject go = Managers.Resource.Instantiate($"UI/Slots/{name}");
+            GameObject go = await Managers.Resource.InstantiateAsync($"UI/Slots/{name}", parent);
 
             if (parent != null)
                 go.transform.SetParent(parent);
@@ -82,14 +83,14 @@ namespace HDU.Managers
             return go.GetComponent<T>();
         }
 
-        public T MakePopup<T>(Transform parent = null, string name = null, bool isAddSorting = true) where T : IUI, IPopupUI
+        public async UniTask<T> MakePopup<T>(Transform parent = null, string name = null, bool isAddSorting = true) where T : IUI, IPopupUI
         {
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
 
             if (isAddSorting)
                 CurPopupSort++;
-            GameObject go = Managers.Resource.Instantiate($"UI/Popup/{name}");
+            GameObject go = await Managers.Resource.InstantiateAsync($"UI/Popup/{name}", parent);
 
             if (parent != null)
                 go.transform.SetParent(parent);

@@ -10,7 +10,10 @@
         "ScriptableObject",
         "Unity.Mathematics",
         "Job",
-        "Unity.Collections"
+        "Unity.Collections",
+        "UniTask.Addressables",
+        "Unity.Addressables",
+        "Unity.ResourceManager"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
