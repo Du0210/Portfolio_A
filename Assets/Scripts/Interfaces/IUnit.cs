@@ -17,6 +17,7 @@ namespace HDU.Interface
         public Collider @Collider { get; }
         public IUnit Target { get; set; }
         public HDU.Define.CoreDefine.EUnitType UnitType { get; set; }
+        public HDU.Define.CoreDefine.EUnitPrefabKey UnitPrefabKey { get; }
 
         public void RegisterStates();
         public void PlayAnimation(string animationName);

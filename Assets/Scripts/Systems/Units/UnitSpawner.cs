@@ -9,18 +9,10 @@ namespace HDU.GameSystem
         [SerializeField] private float radius = 10f;
         [SerializeField] private Color _gizmoColor = Color.yellow;
 
-        private readonly int MAXUNITCOUNT = 10000;
-
-        private GameObject _unitPrefab_S;
-        private GameObject _unitPrefab_R;
+        private readonly int MAXUNITCOUNT = 400;
 
         private async void Start()
         {
-            if(_unitPrefab_R == null)
-                _unitPrefab_R = await Managers.Managers.Resource.LoadAsync<GameObject>(nameof(HDU.Define.CoreDefine.EAddressableKey.Unit_Slime_R));
-            if (_unitPrefab_S == null)
-                _unitPrefab_S = await Managers.Managers.Resource.LoadAsync<GameObject>(nameof(HDU.Define.CoreDefine.EAddressableKey.Unit_Slime_S));
-
             await SpawnUpdate();
         }
 
@@ -28,7 +20,6 @@ namespace HDU.GameSystem
         {
             while (true)
             {
-                GameObject unit = null;
                 int currentCount = 0;
 
                 switch (_spawmType)
@@ -39,13 +30,11 @@ namespace HDU.GameSystem
                     case Define.CoreDefine.ESpawnType.Slime_R:
                         {
                             currentCount = Managers.Managers.Unit.GetUnitCountByType<Unit_Slime_R>();
-                            unit = _unitPrefab_R;
                             break;
                         }
                     case Define.CoreDefine.ESpawnType.Slime_S:
                         {
                             currentCount = Managers.Managers.Unit.GetUnitCountByType<Unit_Slime_S>();
-                            unit = _unitPrefab_S;
                             break;
                         }
                 }
@@ -66,8 +55,12 @@ namespace HDU.GameSystem
                     await UniTask.DelayFrame(1);
                     continue;
                 }
+                switch (_spawmType)
+                {
+                    case Define.CoreDefine.ESpawnType.Slime_R: await Managers.Managers.Unit.SpawnUnit<Unit_Slime_R>(spawnPos, Managers.Managers.Unit.SlimeType, parent: transform); break;
+                    case Define.CoreDefine.ESpawnType.Slime_S: await Managers.Managers.Unit.SpawnUnit<Unit_Slime_S>(spawnPos, Managers.Managers.Unit.SpikeType, parent: transform); break;
+                }
 
-                Managers.Managers.Unit.SpawnUnit<Unit_Slime_S>(spawnPos, unit, parent: transform);
                 await UniTask.Delay(1000);
             }
         }

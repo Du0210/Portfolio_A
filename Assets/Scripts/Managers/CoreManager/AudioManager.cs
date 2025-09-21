@@ -1,6 +1,7 @@
 namespace HDU.Managers
 {
     using Cysharp.Threading.Tasks;
+    using HDU.Define;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -84,8 +85,10 @@ namespace HDU.Managers
         /// <param name="audioClip"> 사운드 데이터 </param>
         /// <param name="type"> 사운드 타입 </param>
         /// <param name="pitch"> 사운드 빠르기</param>
-        public void Play(AudioClip audioClip, Define.CoreDefine.ESoundType type = Define.CoreDefine.ESoundType.FX, float pitch = 1.0f, float volumeRatio = 1)
+        public async void Play(CoreDefine.ESoundKey soundKey, Define.CoreDefine.ESoundType type = Define.CoreDefine.ESoundType.FX, float pitch = 1.0f, float volumeRatio = 1)
         {
+            var audioClip = await Managers.Resource.GetCachedSoundOrNull(soundKey);
+
             if (audioClip == null)
                 return;
 

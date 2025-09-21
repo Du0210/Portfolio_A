@@ -1,3 +1,4 @@
+using HDU.Define;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -7,14 +8,19 @@ namespace HDU.UI
     public class UI_MainPanel : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _txtInfo;
-        [SerializeField] private GameObject _imgCheck;
+        [SerializeField] private GameObject _imgCheck_Job;
+        [SerializeField] private GameObject _imgCheck_Preload;
+        [SerializeField] private GameObject _imgCheck_Grid;
 
         private StringBuilder _infoSB = new StringBuilder();
         private float _timeAcc = 0f;
 
-        private void Start()
+        private async void Start()
         {
-            _imgCheck.SetActive(HDU.Managers.Managers.IsUseJob);
+            _imgCheck_Job.SetActive(HDU.Managers.Managers.IsUseJob);
+            _imgCheck_Preload.SetActive(await Managers.Managers.Resource.IsLabelPreloaded(CoreDefine.ELabelKey.cdn));
+            _imgCheck_Grid.SetActive(Managers.Managers.Grid.IsSetActiveGrid);
+
             DrawInfo();
         }
 
@@ -34,10 +40,24 @@ namespace HDU.UI
             _txtInfo.text = _infoSB.ToString();
         } 
 
-        public void OnClickButton()
+        public void OnClickButton_Job()
         {
             Managers.Managers.SwitchUseJob();
-            _imgCheck.SetActive(HDU.Managers.Managers.IsUseJob);
+            _imgCheck_Job.SetActive(HDU.Managers.Managers.IsUseJob);
+        }
+
+        public async void OnClickButton_Preload()
+        {
+            await HDU.Managers.Managers.Resource.PreloadLabelAsync(CoreDefine.ELabelKey.cdn);
+            await Managers.Managers.Resource.LoadAssetsByLabelAsync(CoreDefine.ELabelKey.cdn);
+            Managers.Managers.Event.InvokeEvent(CoreDefine.EEventType.OnSetUnitSlot);
+            _imgCheck_Preload.SetActive(await Managers.Managers.Resource.IsLabelPreloaded(CoreDefine.ELabelKey.cdn));
+        }
+
+        public void OnClickButton_GridSetActive()
+        {
+            Managers.Managers.Grid.IsSetActiveGrid = !Managers.Managers.Grid.IsSetActiveGrid;
+            _imgCheck_Grid.SetActive(Managers.Managers.Grid.IsSetActiveGrid);
         }
     }
 }

@@ -15,29 +15,41 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: f7e63ae3dc7c9994f8069109a20adfb1
   m_SerializeEntries:
+  - m_GUID: 2cee49d55f34969448421ef720801c2d
+    m_Address: Sprite_Slime_S
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - local
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3123e7262d6161e4fab11700cfa2a4e5
     m_Address: Unit_Slime_S
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Local
+    - local
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 403f8278110f4c44dbb6fe4a1415ddac
     m_Address: Unit_Slime_R
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Local
+    - local
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 86addd92a61736748b350a4f6e66e815
-    m_Address: UI_PopupRoot
+    m_Address: '#UI_PopupRoot'
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Local
+    - local
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bfe01dba78c20fa4ebdd7823ac48f49c
-    m_Address: UI_Root
+    m_Address: '#UI_Root'
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Local
+    - local
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1a9f82e73ffacc4789db0c99eeb3e2b
+    m_Address: Sprite_Slime_R
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - local
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 23ba0ad9ec7434f4cb69e8c9b7db8a98, type: 2}

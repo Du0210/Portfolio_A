@@ -62,7 +62,8 @@ namespace HDU.Define
             OnSynchronizeTime,
 
             // UI
-
+            OnSetUnitSlot,
+            OnRefreshUnitSlots,
             // Stage
 
             // Unit
@@ -176,11 +177,46 @@ namespace HDU.Define
             Obstacle,
         }
 
-        public enum EAddressableKey
+        public enum EUnitPrefabKey
         {
-            Unit_Slime_S,
+            None,
             Unit_Slime_R,
+            Unit_Slime_R_B,
+            Unit_Slime_R_P,
+            Unit_Slime_R_R,
+            Unit_Slime_R_Y,
+            Unit_Slime_S,
+            Unit_Slime_S_B,
+            Unit_Slime_S_P,
+            Unit_Slime_S_R,
+            Unit_Slime_S_Y,
             MaxCount,
+        }
+        public enum ESpriteKey
+        {
+            None,
+            Sprite_Slime_R, Sprite_Slime_R_B, Sprite_Slime_R_P, Sprite_Slime_R_R, Sprite_Slime_R_Y,
+            Sprite_Slime_S, Sprite_Slime_S_B, Sprite_Slime_S_P, Sprite_Slime_S_R, Sprite_Slime_S_Y,
+            MaxCount,
+        }
+        public enum ESoundKey
+        {
+            None,
+            Attack,
+            Hit,
+            Die,
+            MaxCount,
+        }
+        public enum EAtlasKey
+        {
+            None,
+            SpriteAtlas_Unit,
+        }
+        public enum ELabelKey
+        {
+            None,
+            local,
+            cdn,
         }
         #endregion
     }

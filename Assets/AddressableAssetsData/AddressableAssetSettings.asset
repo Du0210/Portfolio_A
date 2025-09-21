@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f7e63ae3dc7c9994f8069109a20adfb1
   m_currentHash:
     serializedVersion: 2
-    Hash: 00000000000000000000000000000000
+    Hash: 39f0a9d472d153339aa3e8e370259001
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
       - m_Id: d25d5b52aed2bc0479ebd721f8c6af58
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: fe0f381502e267549837099298109710
-        m_Value: https://drive.google.com/uc?export=download&id=13cTAU-CC7LRqDUfG7rx4dp1YjbOid9Ac
+        m_Value: https://du0210.github.io/github_pages_test/StandaloneWindows64
     m_ProfileEntryNames:
     - m_Id: 62c072faf3e7c7741b0402aafada9043
       m_Name: Remote.BuildPath
@@ -100,8 +100,8 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - Local
-    - CDN
+    - local
+    - cdn
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 890a15e59fedbc742bd3d6277d96f20d, type: 2}

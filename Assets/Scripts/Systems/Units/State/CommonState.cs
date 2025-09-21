@@ -69,6 +69,7 @@ namespace HDU.GameSystem
         List<Node> _path = null;
 
         private CancellationTokenSource _moveCts;
+        private CancellationToken _destroyToken;
 
         public async void OnEnter(IUnit unit)
         {
@@ -78,6 +79,7 @@ namespace HDU.GameSystem
             // 목적지 세팅
             _targetLastPos = unit.Target.Transform.position;
             _target = unit.Target;
+            _destroyToken = unit.GameObject.GetCancellationTokenOnDestroy();
 
             try
             {
@@ -151,42 +153,47 @@ namespace HDU.GameSystem
                 }
             }
 
-            // 사거리 체크
-            float distanceToTarget = Vector3.Distance(unit.Transform.position, _target.Transform.position);
-            if(distanceToTarget < unit.AttackRange)
+            try
             {
-                _moveCts?.Cancel();
-                ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Attack);
-                return;
-            }
+                _destroyToken.ThrowIfCancellationRequested();
 
-            if(_targetLastPos != _target.Transform.position)
-            {
-                if (_repathTimer >= _repathInterval)
+                // 사거리 체크
+                float distanceToTarget = Vector3.Distance(unit.Transform.position, _target.Transform.position);
+                if (distanceToTarget < unit.AttackRange)
                 {
-                    _repathTimer = 0f;
-
-                    _targetLastPos = _target.Transform.position;
                     _moveCts?.Cancel();
-                    try
+                    ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Attack);
+                    return;
+                }
+
+                if (_targetLastPos != _target.Transform.position)
+                {
+                    if (_repathTimer >= _repathInterval)
                     {
+                        _repathTimer = 0f;
+
+                        _targetLastPos = _target.Transform.position;
+                        _moveCts?.Cancel();
+
                         if (!Managers.IsUseJob)
                             await MovePath(unit);
                         else
                             await MovePathJob(unit);
                     }
-                    catch (OperationCanceledException)
-                    {
-                    }
                 }
             }
+            catch (OperationCanceledException)
+            {
+
+            }
+
+
         }
 
         private async UniTask MovePath(IUnit unit)
         {
             _moveCts = new CancellationTokenSource();
 
-            var token = unit.GameObject.GetCancellationTokenOnDestroy();
             var path = Managers.AStar.FindPath(unit.Transform.position, _target.Transform.position, unit.GetRadius());
 
             if (path == null || path.Count == 0)
@@ -236,8 +243,7 @@ namespace HDU.GameSystem
                     unit.Transform.position = nextPos;
 
                     await UniTask.WaitForFixedUpdate(); // 프레임마다 대기
-                    //_moveCts?.Token.ThrowIfCancellationRequested();
-                    token.ThrowIfCancellationRequested();
+                    _destroyToken.ThrowIfCancellationRequested();
                 }
             }
         }
@@ -248,7 +254,9 @@ namespace HDU.GameSystem
             var token = unit.GameObject.GetCancellationTokenOnDestroy();
 
             var path = await Managers.AStar.FindPathAsync(unit.Transform.position, _target.Transform.position, unit.GetRadius());
-            if(path == null || path.Count == 0)
+            _destroyToken.ThrowIfCancellationRequested();
+
+            if (path == null || path.Count == 0)
             {
                 ChangeStateCallback?.Invoke(CoreDefine.EUnitState.Idle);
                 return;
@@ -380,6 +388,7 @@ namespace HDU.GameSystem
 
             unit.Target.Target = unit; // 맞은 대상이 때린 대상을 타겟으로 설정
             unit.Target.TakeDamage(unit.AttackPower);
+            Managers.Audio.Play(Define.CoreDefine.ESoundKey.Attack, Define.CoreDefine.ESoundType.FX, volumeRatio: 1f);
             await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: token);
             _atkCts?.Token.ThrowIfCancellationRequested();
         }
@@ -424,8 +433,8 @@ namespace HDU.GameSystem
         public async UniTask StartDieAnim(float wait, float duration, IUnit unit)
         {
             var token = unit.GameObject.GetCancellationTokenOnDestroy();
-
             await UniTask.Delay(TimeSpan.FromSeconds(wait), cancellationToken: token);
+            Managers.Audio.Play(Define.CoreDefine.ESoundKey.Die, Define.CoreDefine.ESoundType.FX, volumeRatio: 1f);
             unit.PlayAnimation(nameof(EAnimationKey.Die));
             await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: token);
 

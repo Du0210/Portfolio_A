@@ -75,7 +75,7 @@ namespace HDU.Managers
         {
             if (string.IsNullOrEmpty(name))
                 name = typeof(T).Name;
-            GameObject go = await Managers.Resource.InstantiateAsync($"UI/Slots/{name}", parent);
+            GameObject go = await Managers.Resource.InstantiateLocalAsync($"UI/Slots/{name}", parent: parent);
 
             if (parent != null)
                 go.transform.SetParent(parent);
@@ -90,7 +90,7 @@ namespace HDU.Managers
 
             if (isAddSorting)
                 CurPopupSort++;
-            GameObject go = await Managers.Resource.InstantiateAsync($"UI/Popup/{name}", parent);
+            GameObject go = await Managers.Resource.InstantiateLocalAsync($"UI/Popup/{name}", parent: parent);
 
             if (parent != null)
                 go.transform.SetParent(parent);

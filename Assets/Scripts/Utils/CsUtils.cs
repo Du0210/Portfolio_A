@@ -19,7 +19,7 @@ namespace HDU.Utils
             else
             {
                 if (isPrintErrorLog)
-                    Debug.LogError("Cant Find Enum Value \nname : " + str);
+                    Debug.LogWarning("Cant Find Enum Value \nname : " + str);
                 return default;
             }
         }

@@ -15,53 +15,119 @@ MonoBehaviour:
   m_GroupName: Remote_Units
   m_GUID: d920f887587b9ea4db531f2a0f6bcf86
   m_SerializeEntries:
+  - m_GUID: 104e1ea7e9d908f4fa599f9f6b4b3eb8
+    m_Address: Sprite_Slime_R_Y
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 16151ce6b9dc31d4f9666f227b2689f4
     m_Address: Unit_Slime_R_B
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 186fc784876b3cd449f18731c50dbbcd
+    m_Address: Sprite_Slime_S_R
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 189dcbb31515a3d4b986687563e247c1
+    m_Address: SpriteAtlas_Unit
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b794f2f0de5fab418c1e5e25ee5bef4
+    m_Address: Sprite_Slime_R_R
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1ee1fdad15e3c0847aac5e914956166e
     m_Address: Unit_Slime_R_Y
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2812eebadd3eb484cb48d12d93168aeb
     m_Address: Unit_Slime_R_R
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5e8b3cce791118d49800b36d1ed94acd
+    m_Address: Sprite_Slime_S_P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 805e5e653bfc7e043ad3a9971fb22978
     m_Address: Unit_Slime_S_P
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 83ea9ba3b8df52f4789baf73456deb3e
+    m_Address: Assets/InternalAssest/Sound/attack.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 929e84776d44b5b4fb98ab9a3c263889
+    m_Address: Assets/InternalAssest/Sound/die.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: add0624399bfbd241a4b4d6f7ae2fd94
+    m_Address: Sprite_Slime_R_B
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc59e300ff0abcd4ab3ff75061c76ff0
+    m_Address: Sprite_Slime_S_B
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cef63382400c3024c958d1036ef2ca57
     m_Address: Unit_Slime_S_Y
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2a941e7e08751549b0bbe37e5aaec14
     m_Address: Unit_Slime_R_P
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7a97431e6c0f2c4cbf1bcd34930df2f
+    m_Address: Sprite_Slime_S_Y
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ef3271152b4cf7345b67c11f4c85ffc0
     m_Address: Unit_Slime_S_R
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f3bafa6e37c56a04d8464f0f93593ef3
     m_Address: Unit_Slime_S_B
     m_ReadOnly: 0
     m_SerializedLabels:
-    - CDN
+    - cdn
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc59044697be6a243920b547a6a7077a
+    m_Address: Sprite_Slime_R_P
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - cdn
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 23ba0ad9ec7434f4cb69e8c9b7db8a98, type: 2}

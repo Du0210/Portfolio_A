@@ -6,9 +6,13 @@ namespace HDU.Managers
     using Unity.Collections;
     using Unity.Jobs;
     using Unity.Mathematics;
+    using Cysharp.Threading.Tasks;
 
     public class UnitManager : IManager
     {
+        public HDU.Define.CoreDefine.EUnitPrefabKey SpikeType = Define.CoreDefine.EUnitPrefabKey.Unit_Slime_S;
+        public HDU.Define.CoreDefine.EUnitPrefabKey SlimeType = Define.CoreDefine.EUnitPrefabKey.Unit_Slime_R;
+
         private List<IUnit> _unitList;
         private readonly float TARGETFINEDINTERVAL = 0.5f;
         private float _targetFinedTimer = 0f;
@@ -34,9 +38,10 @@ namespace HDU.Managers
             }
         }
 
-        public T SpawnUnit<T>(Vector3 pos, GameObject original = null, Transform parent = null) where T : IUnit
+        public async UniTask<T> SpawnUnit<T>(Vector3 pos, HDU.Define.CoreDefine.EUnitPrefabKey name, Transform parent = null) where T : IUnit
         {
-            var go = Managers.Resource.Instantiate(obj: original, parent: parent);
+            var cache = await Managers.Resource.GetCachedPrefabOrNull(name);
+            var go = Managers.Resource.InstantiateLocal(go: cache, parent: parent);
             T unit = go.GetComponent<T>();
             unit.Initialize(pos);
             _unitList.Add(unit);
@@ -75,7 +80,7 @@ namespace HDU.Managers
             IUnit target = HDU.Utils.UnityUtils.FindClosestUnit<IUnit>(_unitList, from);
             return target != null && target != from ? target : null;
         }
-
+        
         #region Job
         private void RunTargetSelectionJob()
         {

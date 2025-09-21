@@ -24,11 +24,14 @@ namespace HDU.GameSystem
         public Rigidbody Rigidbody => _rigidbody;
 
         public IUnit Target { get; set; }
-        public CoreDefine.EUnitType UnitType { get; set; }
+        public CoreDefine.EUnitType UnitType { get => _unitType; set => _unitType = value; }
 
         public Collider Collider => _collder;
+        public CoreDefine.EUnitPrefabKey UnitPrefabKey { get => _unitPrefabKey; }
 
         #endregion
+        [SerializeField] private CoreDefine.EUnitPrefabKey _unitPrefabKey;
+        [SerializeField] private CoreDefine.EUnitType _unitType; 
 
         public GFX @GFX;
 

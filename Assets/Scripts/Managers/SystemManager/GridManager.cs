@@ -45,6 +45,7 @@ namespace HDU.Managers
         public Transform GridPoint { get => _gridPoint; }
         public Vector2Int GridSize { get; private set; } = new Vector2Int(8, 24);
         public float CellSize { get; private set; } = 0.5f;
+        public bool IsSetActiveGrid { get; set; } = false;
         private Node[,] _grid;
         public Node[,] Grid => _grid;
 

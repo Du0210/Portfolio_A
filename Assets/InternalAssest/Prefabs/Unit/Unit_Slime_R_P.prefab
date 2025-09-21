@@ -343,6 +343,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4ad52456898b9f43b01916e04ee4d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _unitPrefabKey: 3
+  _unitType: 1
   GFX: {fileID: 5969713703886186692}
 --- !u!136 &358552133511481614
 CapsuleCollider:
