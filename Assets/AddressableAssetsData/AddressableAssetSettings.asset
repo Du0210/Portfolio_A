@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: f7e63ae3dc7c9994f8069109a20adfb1
   m_currentHash:
     serializedVersion: 2
-    Hash: 39f0a9d472d153339aa3e8e370259001
+    Hash: a2412cd51dbc14398c9ae365612fc026
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_CatalogRequestsTimeout: 0
@@ -80,6 +80,20 @@ MonoBehaviour:
         m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
       - m_Id: fe0f381502e267549837099298109710
         m_Value: https://du0210.github.io/github_pages_test/StandaloneWindows64
+    - m_InheritedParent: 
+      m_Id: f23492dc6a481754ab88508d2aa48bb2
+      m_ProfileName: Android
+      m_Values:
+      - m_Id: 62c072faf3e7c7741b0402aafada9043
+        m_Value: Assets/StreamingAssets/AA/Remote
+      - m_Id: 6bba8e02500ab6346a9dee921b8343e8
+        m_Value: '[UnityEditor.EditorUserBuildSettings.activeBuildTarget]'
+      - m_Id: 8e21a300ca57ac64e87c420eb4d841e4
+        m_Value: '[UnityEngine.AddressableAssets.Addressables.BuildPath]/[BuildTarget]'
+      - m_Id: d25d5b52aed2bc0479ebd721f8c6af58
+        m_Value: '{UnityEngine.AddressableAssets.Addressables.RuntimePath}/[BuildTarget]'
+      - m_Id: fe0f381502e267549837099298109710
+        m_Value: https://du0210.github.io/github_pages_test/Android
     m_ProfileEntryNames:
     - m_Id: 62c072faf3e7c7741b0402aafada9043
       m_Name: Remote.BuildPath
@@ -114,4 +128,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2f5a235539288024e99f380f01227c85, type: 2}
   - {fileID: 11400000, guid: 618b740fa50da2044baa3ba686ea5ccb, type: 2}
   - {fileID: 11400000, guid: 03881e5896c8ea7489a39b5d259e569c, type: 2}
-  m_ActiveProfileId: 5db6c8d31e257ee499c55d396346026c
+  m_ActiveProfileId: f23492dc6a481754ab88508d2aa48bb2

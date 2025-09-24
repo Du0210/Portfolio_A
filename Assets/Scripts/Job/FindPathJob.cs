@@ -124,7 +124,6 @@ namespace HDU.Jobs
                     bestIndex = i;
                 }
 
-                // 강제 타겟 우선 처리 (실험적으로 안정성 향상용)
                 if (i == targetIndex && Records[i].IsInOpenSet)
                     return i;
             }
